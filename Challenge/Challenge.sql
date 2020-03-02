@@ -1,17 +1,21 @@
 --CHallenge Module 7
 --Number of titles retiring
 SELECT e.emp_no,
+e.birth_date,
 e.first_name,
 e.last_name,
 ti.title,
 ti.from_date,
+ti.to_date,
 sa.salary
-INTO retiring_title
+INTO retiring_title1
 FROM employees as e
 INNER JOIN titles AS ti
 ON (e.emp_no = ti.emp_no)
 INNER JOIN salaries AS sa
-ON (ti.emp_no = sa.emp_no);
+ON (ti.emp_no = sa.emp_no)
+WHERE e.birth_date BETWEEN '1952-01-01' AND '1955-01-01'
+AND ti.to_date = ('9999-01-01');
 
 --Eliminate duplicate names/emp_no
 CREATE TABLE non_duplicate as (
@@ -31,7 +35,14 @@ SELECT title,
 	COUNT (title)
 FROM non_duplicate
 GROUP BY from_date, title
-ORDER BY from_date);
+ORDER BY from_date DESC);
+
+--frequency table of title
+CREATE TABLE frequency_by_title1 as (
+SELECT title,
+	COUNT (title)
+FROM non_duplicate1
+GROUP BY title;
 
 --table with employee number, name, title, from and to date
 SELECT e.emp_no,
